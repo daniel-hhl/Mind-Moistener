@@ -1,3 +1,4 @@
+// Declare chart
 const ctx = document.getElementById('myChart');
 
 new Chart(ctx, {

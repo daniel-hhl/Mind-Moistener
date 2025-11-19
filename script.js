@@ -1,3 +1,8 @@
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// Declare chart
 const ctx = document.getElementById('myChart');
 
 new Chart(ctx, {

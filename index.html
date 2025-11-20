@@ -11,14 +11,92 @@
 <body>
     <h1>Hydration Tracker</h1>
 
-    <div class="card">
-        <header>
-            <h2>1000 / 2000 ml</h2>
-        </header>
-        <div class="container">
-            <div class="progress-bar"></div>
+    <div class="flex-container">
+
+        <!-- Patient 1 Card -->
+        <div class="card">
+            <header>
+                <h2>Patient 1</h2>
+            </header>
+            <div class="container">
+                <div class="progress-bar"></div>
+            </div>
+            <p>1000 / 2000 mL</p>
+
+            <h2>Last Water Intake: 1:25pm</h2>
+
+
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Volume</th>
+                </tr>
+                <tr>
+                    <td>6:00</td>
+                    <td>100mL</td>
+                </tr>
+                <tr>
+                    <td>8:00</td>
+                    <td>100mL</td>
+                </tr>
+                <tr>
+                    <td>10:00</td>
+                    <td>100mL</td>
+                </tr>
+                <tr>
+                    <td>12:00</td>
+                    <td>100mL</td>
+                </tr>
+            </table>
+
+            <div style="position: relative; height:40vh; width:800px">
+                <canvas id="patient-one"></canvas>
+            </div>
         </div>
+
+
+        <!-- Patient 2 Card -->
+        <div class="card">
+            <header>
+                <h2>Patient 2</h2>
+            </header>
+            <div class="container">
+                <div class="progress-bar"></div>
+            </div>
+            <p>1000 / 2000 mL</p>
+
+            <h2>Last Water Intake: 1:25pm</h2>
+
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Volume</th>
+                </tr>
+                <tr>
+                    <td>6:00</td>
+                    <td>100mL</td>
+                </tr>
+                <tr>
+                    <td>8:00</td>
+                    <td>100mL</td>
+                </tr>
+                <tr>
+                    <td>10:00</td>
+                    <td>100mL</td>
+                </tr>
+                <tr>
+                    <td>12:00</td>
+                    <td>100mL</td>
+                </tr>
+            </table>
+
+            <div style="position: relative; height:40vh; width:800px">
+                <canvas id="patient-two"></canvas>
+            </div>
+        </div>
+
     </div>
+
 
     <script type="module">
         // Import the functions you need from the SDKs you need
@@ -75,10 +153,6 @@
             console.log('Remaining:', waterRemaining);
         });
     </script>
-
-    <div style="position: relative; height:40vh; width:50vw">
-        <canvas id="myChart"></canvas>
-    </div>
 
     <script src="script.js"></script>
 

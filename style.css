@@ -2,21 +2,22 @@
     height: 25px;
     background-color: #CCC;
     position:relative;
-    border-radius: 7px;
+    border-radius: 15px;
+    margin: 30px;
+    margin-bottom: 10px;
 } 
 
 .container .progress-bar{
     position: absolute;
     height: 100%;
-    border-radius: 7px;
-
-    background-color: blue;
+    border-radius: 15px;
+    background-color: rgb(92, 166, 203);
     animation: progress-animation 5s forwards;
 }
 
 @keyframes progress-animation {
     0% {width: 0%}
-    50% {width: 50%}
+    100% {width: 50%}
 }
 
 .card {
@@ -24,7 +25,14 @@
     overflow: hidden;
     background-color: rgb(14, 14, 14);
     border-radius: 25px;
+    padding: 15px;
+    margin: 10px;
 }
+
+.flex-container {
+    display: flex;
+}
+
 
 @font-face {
     font-family: Effra Trial;
@@ -39,8 +47,45 @@
 
 head {
     border: 20px rgb(255, 255, 255);
+    text-align: center;
 }
 
 body {
     background-color: rgb(9,9,9);
+    margin: 30px;
+}
+
+p {
+    text-align: center;
+}
+
+h2 {
+    margin: 15px;
+}
+
+table {
+    border: 2px solid white;
+    border-collapse:separate;
+    width: 50%;
+    border-spacing: 0;
+    margin: 30px;
+    border-radius: 15px;
+}
+
+td {
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  padding: 10px;
+}
+
+td:first-child, th:first-child {
+     border-left: none;
+}
+
+th {
+    border-top: none;
+    border-left: 2px solid white;
+    border-left: 2px solid white;
+    padding: 10px;
 }

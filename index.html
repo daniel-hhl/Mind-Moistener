@@ -100,11 +100,15 @@
     <!-- Firebase Integration -->
     <script type="module">
         // Import the functions you need from the SDKs you need
-        import { initializeApp } from "firebase/app";
-        import { getAnalytics } from "firebase/analytics";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import {
+            getDatabase,
+            ref,
+            query,
+            orderByKey,
+            limitToLast,
+            onValue
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
         // Your web app's Firebase configuration
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
@@ -123,38 +127,54 @@
         const database = getDatabase(app);
 
         // Listen to Patient 1 data in real-time
-        const patient1Ref = ref(database, '/Patient1');
-        onValue(patient1Ref, (snapshot) => {
-            const data = snapshot.val();
-            
-            if (data) {
-                const time = data['Time'] || 'N/A';
-                const volume = data['Volume'] || 0;
-                
-                // Update Patient 1 UI
-                updatePatientUI(1, time, volume);
-                
-                console.log('Patient 1 data updated:', { time, volume });
-            }
-        });
+        const patient1ListRef = ref(database, '/Users/User1/water_intake');
+
+        // Query newest (last) push ID
+        const latestPatient1Query = query(
+            patient1ListRef,
+            orderByKey(),
+            limitToLast(1)
+        );
+
+        onValue(latestPatient1Query, (snapshot) => {
+            if (!snapshot.exists()) return;
+
+            let newest = null;
+
+            // Firebase iterates children IN DATABASE DISPLAY ORDER
+            snapshot.forEach((child) => {
+                newest = { id: child.key, ...child.val() };
+            });
+
+            // newest = the last one in the database (what you want)
+            console.log("Most recent (based on DB order):", newest);
+
+            const time = newest.time || "N/A";
+            const volume = newest.volume || 0;
+
+            // Update Patient 1 UI
+            // updatePatientUI(1, time, volume);
+            // console.log('Patient 1 data updated:', { id, time, volume });
+        }
+        );
 
         // Function to update the UI for each patient
         function updatePatientUI(patientNum, time, volume) {
             const dailyGoal = 2000; // Set daily goal (you can make this dynamic too)
-            
+
             // Update progress text
-            document.getElementById(`progress-text-${patientNum}`).textContent = 
+            document.getElementById(`progress-text-${patientNum}`).textContent =
                 `${volume} / ${dailyGoal} mL`;
-            
+
             // Update last water intake time
-            document.getElementById(`last-intake-${patientNum}`).textContent = 
+            document.getElementById(`last-intake-${patientNum}`).textContent =
                 `Last Water Intake: ${time}`;
-            
+
             // Update progress bar
             const progressBar = document.getElementById(`progress-bar-${patientNum}`);
             const percentage = (volume / dailyGoal) * 100;
             progressBar.style.width = Math.min(percentage, 100) + '%';
-            
+
             // Make data available globally for chart.js or other scripts
             if (patientNum === 1) {
                 window.patient1Data = { time, volume };

@@ -1,23 +1,41 @@
-.container{
+.container {
     height: 25px;
     background-color: #CCC;
-    position:relative;
+    position: relative;
     border-radius: 15px;
     margin: 30px;
     margin-bottom: 10px;
-} 
+}
 
-.container .progress-bar{
+.container .progress-bar {
     position: absolute;
     height: 100%;
     border-radius: 15px;
     background-color: rgb(92, 166, 203);
-    animation: progress-animation 5s forwards;
+}
+
+.bar2 {
+    animation: progress-animation2 5s forwards;
+}
+
+@keyframes progress-animation2 {
+    0% {
+        width: 0%
+    }
+
+    100% {
+        width: 24%
+    }
 }
 
 @keyframes progress-animation {
-    0% {width: 0%}
-    100% {width: 50%}
+    0% {
+        width: 0%
+    }
+
+    100% {
+        width: 24%
+    }
 }
 
 .card {
@@ -51,7 +69,7 @@ head {
 }
 
 body {
-    background-color: rgb(9,9,9);
+    background-color: rgb(9, 9, 9);
     margin: 30px;
 }
 
@@ -65,7 +83,7 @@ h2 {
 
 table {
     border: 2px solid white;
-    border-collapse:separate;
+    border-collapse: separate;
     width: 50%;
     border-spacing: 0;
     margin: 30px;
@@ -73,14 +91,15 @@ table {
 }
 
 td {
-  border-left: 2px solid white;
-  border-top: 2px solid white;
-  border-left: 2px solid white;
-  padding: 10px;
+    border-left: 2px solid white;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+    padding: 10px;
 }
 
-td:first-child, th:first-child {
-     border-left: none;
+td:first-child,
+th:first-child {
+    border-left: none;
 }
 
 th {

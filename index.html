@@ -23,7 +23,7 @@
             </div>
             <p>1000 / 2000 mL</p>
 
-            <h2>Last Water Intake: 1:25pm</h2>
+            <h2 id="last-intake"></h2>
 
 
             <table>
@@ -32,20 +32,20 @@
                     <th>Volume</th>
                 </tr>
                 <tr>
-                    <td>6:00</td>
+                    <td>6:01:45 AM</td>
                     <td>100mL</td>
                 </tr>
                 <tr>
-                    <td>8:00</td>
+                    <td>8:52:34 AM</td>
                     <td>100mL</td>
                 </tr>
                 <tr>
-                    <td>10:00</td>
+                    <td>10:45:12 AM</td>
                     <td>100mL</td>
                 </tr>
                 <tr>
-                    <td>12:00</td>
-                    <td>100mL</td>
+                    <td id="current-time"></td>
+                    <td id="intake-volume"></td>
                 </tr>
             </table>
 
@@ -61,11 +61,11 @@
                 <h2>Patient 2</h2>
             </header>
             <div class="container">
-                <div class="progress-bar"></div>
+                <div class="progress-bar bar2"></div>
             </div>
-            <p>1000 / 2000 mL</p>
+            <p>478 / 2000 mL</p>
 
-            <h2>Last Water Intake: 1:25pm</h2>
+            <h2>Last Water Intake: 1:25:23 EST</h2>
 
             <table>
                 <tr>
@@ -73,20 +73,20 @@
                     <th>Volume</th>
                 </tr>
                 <tr>
-                    <td>6:00</td>
-                    <td>100mL</td>
+                    <td>5:12:13 PM</td>
+                    <td>156 mL</td>
                 </tr>
                 <tr>
-                    <td>8:00</td>
-                    <td>100mL</td>
+                    <td>6:00:80 PM</td>
+                    <td>132 mL</td>
                 </tr>
                 <tr>
-                    <td>10:00</td>
-                    <td>100mL</td>
+                    <td>7:34:81 PM</td>
+                    <td>78 mL</td>
                 </tr>
                 <tr>
-                    <td>12:00</td>
-                    <td>100mL</td>
+                    <td>8:29:18 PM</td>
+                    <td>112 mL</td>
                 </tr>
             </table>
 
@@ -97,18 +97,19 @@
 
     </div>
 
-    <!-- Firebase Integration -->
     <script type="module">
         // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
         import {
             getDatabase,
             ref,
-            query,
-            orderByKey,
-            limitToLast,
             onValue
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
         // Your web app's Firebase configuration
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
@@ -126,37 +127,40 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Listen to Patient 1 data in real-time
-        const patient1ListRef = ref(database, '/Users/User1/water_intake');
+        // create volume and time
+        let latestVolume = 0;
+        let latestTime = "N/A";
+        let now = new Date();
+        let time = now.toLocaleTimeString();
 
-        // Query newest (last) push ID
-        const latestPatient1Query = query(
-            patient1ListRef,
-            orderByKey(),
-            limitToLast(1)
-        );
+        // Reference to the parent node containing both values
+        const intakeRef = ref(database, "/Users/User1/water_intake");
 
-        onValue(latestPatient1Query, (snapshot) => {
-            if (!snapshot.exists()) return;
 
-            let newest = null;
+        document.getElementById("last-intake").innerHTML = `Last Water Intake: ${latestTime}`;
+        document.getElementById("intake-volume").innerHTML = `${latestVolume} mL`;
+        document.getElementById("current-time").innerHTML = `${time}`;
 
-            // Firebase iterates children IN DATABASE DISPLAY ORDER
-            snapshot.forEach((child) => {
-                newest = { id: child.key, ...child.val() };
-            });
+        // listener for time and volume
+        onValue(intakeRef, (snapshot) => {
+            const data = snapshot.val();
 
-            // newest = the last one in the database (what you want)
-            console.log("Most recent (based on DB order):", newest);
+            // Store in variables
+            latestVolume = data?.volume ?? 0;
+            latestTime = data?.time ?? "N/A";
 
-            const time = newest.time || "N/A";
-            const volume = newest.volume || 0;
+            now = new Date();
+            time = now.toLocaleTimeString();
 
-            // Update Patient 1 UI
-            // updatePatientUI(1, time, volume);
-            // console.log('Patient 1 data updated:', { id, time, volume });
-        }
-        );
+            console.log("Updated:", latestTime, latestVolume);
+
+            // Update UI
+            document.getElementById("last-intake").innerHTML = `Last Water Intake: ${latestTime}`;
+            document.getElementById("intake-volume").innerHTML = `${latestVolume} mL`;
+            document.getElementById("current-time").innerHTML = `${time}`;
+
+        });
+
 
         // Function to update the UI for each patient
         function updatePatientUI(patientNum, time, volume) {
@@ -185,6 +189,7 @@
     </script>
 
     <script src="script.js"></script>
+
 
 </body>
 

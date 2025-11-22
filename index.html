@@ -19,9 +19,9 @@
                 <h2>Patient 1</h2>
             </header>
             <div class="container">
-                <div class="progress-bar"></div>
+                <div class="progress-bar bar1"></div>
             </div>
-            <p>1000 / 2000 mL</p>
+            <p id="total"></p>
 
             <h2 id="last-intake"></h2>
 
@@ -33,15 +33,15 @@
                 </tr>
                 <tr>
                     <td>6:01:45 AM</td>
-                    <td>100mL</td>
+                    <td>143 mL</td>
                 </tr>
                 <tr>
                     <td>8:52:34 AM</td>
-                    <td>100mL</td>
+                    <td>67 mL</td>
                 </tr>
                 <tr>
                     <td>10:45:12 AM</td>
-                    <td>100mL</td>
+                    <td>82 mL</td>
                 </tr>
                 <tr>
                     <td id="current-time"></td>
@@ -132,6 +132,7 @@
         let latestTime = "N/A";
         let now = new Date();
         let time = now.toLocaleTimeString();
+        let total_volume = 292;
 
         // Reference to the parent node containing both values
         const intakeRef = ref(database, "/Users/User1/water_intake");
@@ -140,7 +141,8 @@
         document.getElementById("last-intake").innerHTML = `Last Water Intake: ${latestTime}`;
         document.getElementById("intake-volume").innerHTML = `${latestVolume} mL`;
         document.getElementById("current-time").innerHTML = `${time}`;
-
+        document.getElementById("total").innerHTML = `${total_volume} mL / 2000 mL`;
+        document.querySelector('.bar1').style.setProperty('--end_width', `${(total_volume/2000)*100}%`);
         // listener for time and volume
         onValue(intakeRef, (snapshot) => {
             const data = snapshot.val();
@@ -154,10 +156,14 @@
 
             console.log("Updated:", latestTime, latestVolume);
 
+            latestVolume = Math.round(latestVolume);
+            total_volume += latestVolume;
+
             // Update UI
             document.getElementById("last-intake").innerHTML = `Last Water Intake: ${latestTime}`;
             document.getElementById("intake-volume").innerHTML = `${latestVolume} mL`;
             document.getElementById("current-time").innerHTML = `${time}`;
+            // root.style.setProperty('end_width', `${total_volume/2000*100}%`);
 
         });
 
@@ -177,7 +183,7 @@
             // Update progress bar
             const progressBar = document.getElementById(`progress-bar-${patientNum}`);
             const percentage = (volume / dailyGoal) * 100;
-            progressBar.style.width = Math.min(percentage, 100) + '%';
+            root.style.setProperty('end_width', `${total_volume/2000*100}%`);
 
             // Make data available globally for chart.js or other scripts
             if (patientNum === 1) {

@@ -14,28 +14,26 @@
     background-color: rgb(92, 166, 203);
 }
 
+:root {
+  --end_width: 0%;
+}
+
+.bar1 {
+    animation: progress-animation1 5s forwards;
+}
+
 .bar2 {
     animation: progress-animation2 5s forwards;
 }
 
-@keyframes progress-animation2 {
-    0% {
-        width: 0%
-    }
-
-    100% {
-        width: 24%
-    }
+@keyframes progress-animation1 {
+    0% {width: 0%}
+    100% {width: var(--end_width);}
 }
 
-@keyframes progress-animation {
-    0% {
-        width: 0%
-    }
-
-    100% {
-        width: 24%
-    }
+@keyframes progress-animation2 {
+    0% {width: 0%}
+    100% {width: 24%}
 }
 
 .card {
